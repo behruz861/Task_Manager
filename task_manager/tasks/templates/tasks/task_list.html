@@ -1,0 +1,32 @@
+<h1>Task List</h1>
+
+<h2>Active Tasks</h2>
+<ul>
+    {% for task in tasks %}
+        <li>
+            {{ task.title }} - {{ task.deadline }} - {{ task.priority }}
+            <form method="POST" action="{% url 'task_delete' task.id %}">
+                {% csrf_token %}
+                <button type="submit">Удалить</button>
+            </form>
+            <a href="{% url 'task_edit' task.id %}">Редактировать</a>
+            <form method="POST" action="{% url 'task_list' %}">
+                {% csrf_token %}
+                <input type="hidden" name="task_id" value="{{ task.id }}">
+                <button type="submit">Выполнено</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+
+<h2>Completed Tasks</h2>
+<ul>
+    {% for task in completed_tasks %}
+        <li>
+            {{ task.title }} - {{ task.deadline }} - {{ task.priority }}
+        </li>
+    {% empty %}
+        <li>No completed tasks.</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'task_create' %}">Создать задачу</a>
